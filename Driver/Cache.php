@@ -82,7 +82,9 @@ class Cache
      */
     private static function cache_path()
     {
-        return rtrim(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR, '/\\');
+        $dir=dirname(__DIR__) . DIRECTORY_SEPARATOR  . 'cache' . DIRECTORY_SEPARATOR ;
+        if(!is_dir($dir)) mkdir($dir, 0755, true);
+        return $dir;
     }
 
 }
