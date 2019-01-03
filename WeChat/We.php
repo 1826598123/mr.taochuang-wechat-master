@@ -21,7 +21,7 @@ class We extends WeChat
      */
     public function GetWechatIp()
     {
-        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->data;
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->toArray();
     }
 
     /**

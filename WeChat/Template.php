@@ -22,8 +22,7 @@ class Template extends WeChat{
      * 模板消息设置行业
      */
     public function TemplateSetIndustry(array $options){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::post($url,Tool::arr2json($options)));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 
     /**
@@ -33,8 +32,7 @@ class Template extends WeChat{
      * 获取设置的行业信息
      */
     public function TemplateGetIndustry(){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::get($url));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->toArray();
     }
 
     /**
@@ -44,8 +42,7 @@ class Template extends WeChat{
      * 获得模板ID
      */
     public function TemplateId(array $options){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::post($url,Tool::arr2json($options)));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 
     /**
@@ -55,8 +52,7 @@ class Template extends WeChat{
      * 获取模板列表
      */
     public function TemplateList(){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::get($url));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->toArray();
     }
 
     /**
@@ -66,8 +62,7 @@ class Template extends WeChat{
      * 删除模板
      */
     public function TemplateDelete(array $options){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::post($url,Tool::arr2json($options)));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 
     /**
@@ -77,8 +72,7 @@ class Template extends WeChat{
      *发送模板消息
      */
     public function TemplateSend(array $options){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::post($url,Tool::arr2json($options)));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 
     /**
@@ -88,8 +82,7 @@ class Template extends WeChat{
      * 通过API推送订阅模板消息给到授权微信用户
      */
     public function SubscribeTemplate(array $options){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::post($url,Tool::arr2json($options)));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 
 }

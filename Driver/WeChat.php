@@ -11,7 +11,17 @@ namespace Driver;
  *
  * -----微信集成类----
  *
- *@method  \Wechat\We We($config) static 第三方插件库
+ * @method  \WeChat\We We($config = []) static 微信基础类
+ * @method  \WeChat\Custom Custom($config = []) static 客服消息
+ * @method  \WeChat\Kfaccount Kfaccount($config = []) static 客服设置
+ * @method  \WeChat\Media Media($config = []) static 素材管理
+ * @method  \WeChat\Menu Menu($config=[]) static 菜单管理
+ * @method  \WeChat\Template Template($config=[]) static 模板消息
+ * @method  \WeChat\User User($config=[]) static 微信用户管理
+ * @method  \WeChat\Summary Summary($config=[]) static 微信数据分析
+ * @method  \WeChat\Qrcode Qrcode($config=[]) static 二维码管理
+ * @method  \WeChat\Card Card($config=[]) static 卡券管理
+ *
  */
 class WeChat
 {
@@ -26,26 +36,50 @@ class WeChat
      * @param array $param
      * 获取微信公众号配置信息
      */
-    public function __construct(array $param)
+    public function __construct($param=[])
     {
-        self::$config =new Init($param);
+        if(!empty($param)) self::$config = new Init($param);
     }
 
     /**
+     * 初始微信请求
      * @param $url
      * @return Init
      */
-    public static function instance($url='')
+    public static function instance($url = '')
     {
         return self::$config->registerUrl($url);
     }
-    public static function getAccessToken(){
-        return self::$config->AccessToken();
-    }
-    public static function __callStatic($name,$arguments){
+
+    /**
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     * @throws \Exception
+     * 静态调取子类
+     */
+    public static function __callStatic($name, $arguments)
+    {
         $class = "\\WeChat\\" . ucfirst(strtolower($name));
         if (class_exists($class)) return new $class($arguments[0]);
         throw new \Exception("Class '{$class}' not found");
+    }
+    /**
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     * @throws \Exception
+     * 非静态调取子类
+     */
+    public function __call($name, $arguments)
+    {
+        $class = "\\WeChat\\" . ucfirst(strtolower($name));
+        if (class_exists($class)) return new $class($arguments[0]);
+        throw new \Exception("Class '{$class}' not found");
+    }
+    protected static function GetAccessToken()
+    {
+        return self::$config->AccessToken();
     }
 
 }

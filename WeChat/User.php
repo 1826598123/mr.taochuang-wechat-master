@@ -21,7 +21,7 @@ class User extends WeChat{
      * @return string
      */
     public function UserGetCode($redirect_uri,$scope='snsapi_base',$state='STATE'){
-        $url = self::url(__FUNCTION__,self::$config->set('redirect_uri',$redirect_uri),self::$config->set('scope',$scope),self::$config->set('state',$state));
+        $url=self::instance(__FUNCTION__)->run(self::$config->set('redirect_uri',$redirect_uri),self::$config->set('scope',$scope),self::$config->set('state',$state))->toUrl();
         header('location:'.$url);exit;
     }
 
@@ -32,8 +32,7 @@ class User extends WeChat{
      * 获取用户access_token
      */
     public function UserAccessToken($code){
-        $url = self::url(__FUNCTION__,self::$config->set('code',$code));
-        return Tool::json2arr(Tool::get($url));
+        return self::instance(__FUNCTION__)->run(self::$config->set('code',$code))->get()->toArray();
     }
 
     /**
@@ -43,8 +42,7 @@ class User extends WeChat{
      * 刷新access_token
      */
     public function RefreshToken($refresh_token){
-        $url = self::url(__FUNCTION__,self::$config->set('refresh_token',$refresh_token));
-        return Tool::json2arr(Tool::get($url));
+        return self::instance(__FUNCTION__)->run(self::$config->set('refresh_token',$refresh_token))->get()->toArray();
     }
 
     /**
@@ -56,12 +54,145 @@ class User extends WeChat{
      * 微信获取用户信息
      */
     public function UserInfo($access_token,$openid,$lang='zh_CN'){
-        $url = self::url(__FUNCTION__,self::$config->set('access_token',$access_token),self::$config->set('openid',$openid),self::$config->set('zh_cn',$lang));
-        return Tool::json2arr(Tool::get($url));
+        return self::instance(__FUNCTION__)->run(self::$config->set('access_token',$access_token),self::$config->set('openid',$openid),self::$config->set('zh_cn',$lang))->get()->toArray();
     }
 
+    /**
+     * @param $access_token
+     * @param $openid
+     * @return array
+     * 检测 微信授权的 access_token 是否过期
+     */
     public function CheckAccessToken($access_token,$openid){
-        $url = self::url(__FUNCTION__,self::$config->set('access_token',$access_token),self::$config->set('openid',$openid));
-        return Tool::json2arr(Tool::get($url));
+        return self::instance(__FUNCTION__)->run(self::$config->set('access_token',$access_token),self::$config->set('openid',$openid))->get()->toArray();
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     * 创建用户标签
+     */
+    public function UserTagsCreate(array $options){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
+    }
+
+    /**
+     * @return array
+     * 获取公众号已创建的标签
+     */
+    public function UserTagsGet(){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->toArray();
+    }
+
+    /**
+     * @return array
+     * 编辑标签
+     */
+    public function UserTagsUpdate(array $options){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     * 删除标签
+     */
+    public function UserTagsDelete(array $options){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
+    }
+
+    /**
+     * @return array
+     * 获取标签下粉丝列表
+     */
+    public function UserTagsFans(){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->toArray();
+    }
+
+
+    /**
+     * @param array $options
+     * @return array
+     * 批量为用户打标签
+     */
+    public function UserTagsMembers(array $options){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     * 批量为用户取消标签
+     */
+    public function UserTagsUnmembers(array $options){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
+    }
+
+    /**
+     * @return array
+     * 获取用户身上的标签列表
+     */
+    public function UserTagslist(){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->toArray();
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     * 设置用户备注名
+     */
+    public function UserSetRemark(array $options){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
+    }
+
+    /**
+     * @return array
+     * 获取用户基本信息
+     */
+    public function UserGetInfo(){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->toArray();
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     * 批量获取用户信息
+     */
+    public function UserGetInfos(array $options){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
+    }
+
+    /**
+     * @param $next_openid /下一个openid
+     * @return array
+     * 获取用户列表
+     */
+    public function UserGetInfolist($next_openid){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken(),self::$config->set('next_openid',$next_openid))->get()->toArray();
+    }
+
+    /**
+     * @return array
+     * 获取公众号黑名单列表
+     */
+    public function UserGetBlack(){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->toArray();
+    }
+
+    /**
+     * @return array
+     * 拉黑用户
+     */
+    public function UserSetBlack(array $options){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     * 取消拉黑用户
+     */
+    public function UserSetUnblack(array $options){
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 }

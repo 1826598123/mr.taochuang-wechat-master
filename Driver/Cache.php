@@ -73,9 +73,8 @@ class Cache
      */
     protected static function create_name($name)
     {
-        return self::cache_path() . DIRECTORY_SEPARATOR . md5($name) . '_#' . $name . '#';
+        return self::cache_path() . md5($name) . '_#' . $name . '#';
     }
-
     /**
      * @return string
      * 缓存目录

@@ -18,19 +18,12 @@ class Init implements ArrayAccess
      * 配置值
      * @var array
      */
-    public  $config = [];
-    private $api;
+    public $config = [];
+    protected $reserved_api=[];
 
     public function __construct($param)
     {
-        if (empty($param['appid'])) {
-            throw new \Exception("EMPTY APPID");
-        }
-        if (empty($param['appsecret'])) {
-            throw new \Exception("EMPTY APPSECRET");
-        }
         $this->config = $param;
-
     }
 
     /**
@@ -125,18 +118,23 @@ class Init implements ArrayAccess
      */
     public function registerUrl($api)
     {
-        $this->api = $api;
+        if(!empty($api)) $this->reserved_api[$api]=$api;
         return $this;
     }
 
     /**
-     * @param $function
-     * 运行方法
+     * @return Api
+     * 可执行闭包操作
      */
-    public function run($function = [])
+    public function run()
     {
-        func_get_args();
-        $data = new Api($this->api, $this->config);
+
+        $func=func_get_args();
+        $function = end($func);
+        if(is_object($function)) $this->config['run']=$function($this,$func);
+        $api=end($this->reserved_api);
+        unset($this->reserved_api[$api]);
+        $data = new Api($api, $this->config);
         return $data;
     }
 
@@ -144,6 +142,7 @@ class Init implements ArrayAccess
     {
         $access_token = Cache::get('AccessToken');
         if (isset($access_token)) {
+            $this->config['access_token']=$access_token;
             self::set('access_token', $access_token);
             return $access_token;
         } else {
@@ -151,8 +150,9 @@ class Init implements ArrayAccess
             if (!empty($res['access_token'])) {
                 Cache::set('AccessToken', $res['access_token'], 7000);
                 self::set('access_token', $res['access_token']);
+                $this->config['access_token']=$res['access_token'];
                 return $res['access_token'];
-            } else {
+            } else{
                 throw new \Exception($res['access_token']);
             }
         }

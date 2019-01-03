@@ -22,8 +22,7 @@ class Menu extends WeChat{
      * 创建微信菜单
      */
     public function CreateMenu(array $options){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::post($url,Tool::arr2json($options)));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 
     /**
@@ -51,8 +50,7 @@ class Menu extends WeChat{
      * 创建个性菜单
      */
     public function CreateConditionalMenu(array $options){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::post($url,Tool::arr2json($options)));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 
     /**
@@ -62,8 +60,7 @@ class Menu extends WeChat{
      * 删除个性化菜单
      */
     public function DeleteConditionalMenu(array $options){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::post($url,Tool::arr2json($options)));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 
     /**
@@ -73,8 +70,7 @@ class Menu extends WeChat{
      * 测试个性化菜单匹配结果
      */
     public function TryMatch(array $options){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::post($url,Tool::arr2json($options)));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->post($options)->toArray();
     }
 
     /**
@@ -83,8 +79,7 @@ class Menu extends WeChat{
      * 获取自定义菜单配置接口
      */
     public function GetCurrentSelfmenuInfo(){
-        $url = self::url(__FUNCTION__,self::AccessToken());
-        return Tool::json2arr(Tool::get($url));
+        return self::instance(__FUNCTION__)->run(self::GetAccessToken())->get()->toArray();
     }
 
 
